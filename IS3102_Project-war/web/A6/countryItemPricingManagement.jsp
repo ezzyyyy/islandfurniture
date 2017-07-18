@@ -1,3 +1,5 @@
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="java.math.RoundingMode"%>
 <%@page import="EntityManager.CountryEntity"%>
 <%@page import="EntityManager.Item_CountryEntity"%>
 <%@page import="EntityManager.LineItemEntity"%>
@@ -5,12 +7,18 @@
 <%@page import="EntityManager.FurnitureEntity"%>
 <%@page import="EntityManager.BillOfMaterialEntity"%>
 <%@page import="java.util.List"%>
+
 <html lang="en">
 
     <jsp:include page="../header2.html" />
 
     <body>
         <script>
+            
+            
+           
+
+
             function checkAll(source) {
                 checkboxes = document.getElementsByName('delete');
                 for (var i = 0, n = checkboxes.length; i < n; i++) {
@@ -115,10 +123,10 @@
                                                                 <%=listOfCountryItemPricing.get(i).getCountry().getName()%>
                                                             </td>
                                                             <td>
-                                                                <%=listOfCountryItemPricing.get(i).getItem().getSKU()%>
+                                                                <%=listOfCountryItemPricing.get(i).getItem().getSKU()%> 
                                                             </td>
                                                             <td>
-                                                                <%=listOfCountryItemPricing.get(i).getRetailPrice()%>
+                                                                <%=Math.round(listOfCountryItemPricing.get(i).getRetailPrice() * 10.0)/10.0%>
                                                                 <div hidden id="updateItemPricing<%=listOfCountryItemPricing.get(i).getId()%>" style="float:right">
                                                                     <input type="number" min="0" max="99999" class="form-control" style="width:80px;" id="price<%=listOfCountryItemPricing.get(i).getId()%>" required/>
                                                                     <input class="btn btn-primary" type="button" value="Submit" onclick="update(<%=listOfCountryItemPricing.get(i).getId()%>)"/>
