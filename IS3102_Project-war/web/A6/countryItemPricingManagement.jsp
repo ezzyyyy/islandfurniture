@@ -23,7 +23,7 @@
             }
             function update(id) {
                 itemPricingManagement.id.value = id;
-                itemPricingManagement.setPrice.value = parseInt($("#price" + id).val());
+                itemPricingManagement.setPrice.value = parseFloat($("#price" + id).val());//CA2 A1
                 document.itemPricingManagement.action = "../CountryItemPricingManagement_UpdateCountryItemPricingServlet";
                 document.itemPricingManagement.submit();
             }
@@ -185,7 +185,7 @@
                                                                 Price:&nbsp;
                                                             </td>
                                                             <td>
-                                                                <input type="number" min="0" max="99999" step="any" class="form-control" name="price" required/>
+                                                                <input type="number" step=0.01 min="0" max="99999" step="any" class="form-control" name="price" required/>
                                                             </td>
                                                         </tr>
                                                     </table>
