@@ -31,7 +31,7 @@
             }
             function update(id) {
                 itemPricingManagement.id.value = id;
-                itemPricingManagement.setPrice.value = parseFloat($("#price" + id).val());//CA2 A1
+                itemPricingManagement.setPrice.value = Math.round(parseFloat($("#price" + id).val()) * 10.0)/10.0;//CA2 A1
                 document.itemPricingManagement.action = "../CountryItemPricingManagement_UpdateCountryItemPricingServlet";
                 document.itemPricingManagement.submit();
             }
@@ -126,9 +126,9 @@
                                                                 <%=listOfCountryItemPricing.get(i).getItem().getSKU()%> 
                                                             </td>
                                                             <td>
-                                                                <%=Math.round(listOfCountryItemPricing.get(i).getRetailPrice() * 10.0)/10.0%>
+                                                                <%=listOfCountryItemPricing.get(i).getRetailPrice()%>
                                                                 <div hidden id="updateItemPricing<%=listOfCountryItemPricing.get(i).getId()%>" style="float:right">
-                                                                    <input type="number" min="0" max="99999" class="form-control" style="width:80px;" id="price<%=listOfCountryItemPricing.get(i).getId()%>" required/>
+                                                                <input type="number" min="0" max="9999 9" class="form-control" style="width:80px;" id="price<%=listOfCountryItemPricing.get(i).getId()%>" required/>
                                                                     <input class="btn btn-primary" type="button" value="Submit" onclick="update(<%=listOfCountryItemPricing.get(i).getId()%>)"/>
                                                                 </div>
                                                             </td>
