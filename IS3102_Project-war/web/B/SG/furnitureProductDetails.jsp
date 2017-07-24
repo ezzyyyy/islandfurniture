@@ -71,7 +71,7 @@
                                         <input type="submit" name="btnEdit" class="btn btn-primary" id="submit" value="Add To Cart"/>
                                     </form>
                                     <%}%>
-                                    <p class="price"><h4 class="amount"><%=furnitures.get(ii).getPrice()%></h4></p>
+                                    <p class="price"><h4 class="amount">$<%=furnitures.get(ii).getPrice()%></h4></p>
                                     <strong>Description</strong>
                                     <p class="taller">
                                         <%=furnitures.get(ii).getDescription()%>

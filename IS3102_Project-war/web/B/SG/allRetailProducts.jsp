@@ -50,6 +50,7 @@
                                             <br/>
                                             <form action="retailProductDetails.jsp">
                                                 <input type="hidden" name="sku" value="<%=retailProducts.get(i).getSKU()%>"/>
+                                                <input type="hidden" name="index" value="<%=i%>">
                                                 <input type="submit" class="btn btn-primary btn-block" value="More Details"/>
                                             </form>
                                         </div>
