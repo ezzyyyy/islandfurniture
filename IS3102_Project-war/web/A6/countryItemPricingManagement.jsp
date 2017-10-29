@@ -1,3 +1,5 @@
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="java.math.RoundingMode"%>
 <%@page import="EntityManager.CountryEntity"%>
 <%@page import="EntityManager.Item_CountryEntity"%>
 <%@page import="EntityManager.LineItemEntity"%>
@@ -5,12 +7,18 @@
 <%@page import="EntityManager.FurnitureEntity"%>
 <%@page import="EntityManager.BillOfMaterialEntity"%>
 <%@page import="java.util.List"%>
+
 <html lang="en">
 
     <jsp:include page="../header2.html" />
 
     <body>
         <script>
+            
+            
+           
+
+
             function checkAll(source) {
                 checkboxes = document.getElementsByName('delete');
                 for (var i = 0, n = checkboxes.length; i < n; i++) {
@@ -23,7 +31,7 @@
             }
             function update(id) {
                 itemPricingManagement.id.value = id;
-                itemPricingManagement.setPrice.value = parseInt($("#price" + id).val());
+                itemPricingManagement.setPrice.value = Math.round(parseFloat($("#price" + id).val()) * 10.0)/10.0;//CA2 A1
                 document.itemPricingManagement.action = "../CountryItemPricingManagement_UpdateCountryItemPricingServlet";
                 document.itemPricingManagement.submit();
             }
@@ -115,12 +123,12 @@
                                                                 <%=listOfCountryItemPricing.get(i).getCountry().getName()%>
                                                             </td>
                                                             <td>
-                                                                <%=listOfCountryItemPricing.get(i).getItem().getSKU()%>
+                                                                <%=listOfCountryItemPricing.get(i).getItem().getSKU()%> 
                                                             </td>
                                                             <td>
                                                                 <%=listOfCountryItemPricing.get(i).getRetailPrice()%>
                                                                 <div hidden id="updateItemPricing<%=listOfCountryItemPricing.get(i).getId()%>" style="float:right">
-                                                                    <input type="number" min="0" max="99999" class="form-control" style="width:80px;" id="price<%=listOfCountryItemPricing.get(i).getId()%>" required/>
+                                                                <input type="number" min="0" max="9999 9" class="form-control" style="width:80px;" id="price<%=listOfCountryItemPricing.get(i).getId()%>" required/>
                                                                     <input class="btn btn-primary" type="button" value="Submit" onclick="update(<%=listOfCountryItemPricing.get(i).getId()%>)"/>
                                                                 </div>
                                                             </td>
@@ -185,7 +193,7 @@
                                                                 Price:&nbsp;
                                                             </td>
                                                             <td>
-                                                                <input type="number" min="0" max="99999" step="any" class="form-control" name="price" required/>
+                                                                <input type="number" step=0.01 min="0" max="99999" step="any" class="form-control" name="price" required/>
                                                             </td>
                                                         </tr>
                                                     </table>
