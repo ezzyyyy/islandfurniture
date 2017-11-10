@@ -47,7 +47,8 @@ public class ECommerce_MemberLoginServlet extends HttpServlet {
                 session.setAttribute("countries", countries);
 
                 session.setAttribute("memberEmail", memberEmail);
-                response.sendRedirect("ECommerce_GetMember");
+                response.sendRedirect("/IS3102_Project-war/B/SG/memberProfile.jsp");
+//                response.sendRedirect("ECommerce_MemberProfile");
             } else {
                 result = "Login fail. Username or password is wrong or account is not activated.";
                 response.sendRedirect("/IS3102_Project-war/B/SG/memberLogin.jsp?errMsg=" + result);
