@@ -25,6 +25,7 @@ import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
@@ -80,24 +81,26 @@ public class ECommerce_MemberEditProfileServlet extends HttpServlet {
             int securityQuestion,String securityAnswer,Integer age,Integer income) {
         Client client = ClientBuilder.newClient();
         WebTarget target = client
-                .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.memberentity").path("editMember")
-                .queryParam("id", id)
-                .queryParam("name", name)
-                .queryParam("phone", phone)
-                .queryParam("address", address)
-                .queryParam("securityQuestion", securityQuestion)
-                .queryParam("securityAnswer", securityAnswer)
-                .queryParam("age", age)
-                .queryParam("income", income);
+                .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.memberentity").path("editMember");
         Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+        Member m = new Member();
+        m.setId(id);
+        m.setName(name);
+        m.setAddress(address);
+        m.setAge(age);
+        m.setIncome(income);
+        m.setPhone(phone);
+        m.setSecurityQuestion(securityQuestion);
+        m.setSecurityAnswer(securityAnswer);
+        
         invocationBuilder.header("some-header", "true");
-        Response response = invocationBuilder.get();
+        Response response = invocationBuilder.put(Entity.entity(m, MediaType.APPLICATION_JSON));
+        //Response response = invocationBuilder.get();
         System.out.println("status: " + response.getStatus());
 
         
 
         //Member member = response.readEntity(Member.class);
-
         return response;
     }
 
