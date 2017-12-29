@@ -17,6 +17,20 @@ public class Member {
     private Integer age;
     private Integer income;
 
+    /*public Member(Long id, String name, String email, String phone, String address, String city, Integer age, Integer income) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.city = city;
+        this.age = age;
+        this.income = income;
+    }*/
+
+
+    
+
     public Long getId() {
         return id;
     }
