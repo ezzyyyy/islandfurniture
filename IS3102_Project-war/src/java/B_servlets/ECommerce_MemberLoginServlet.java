@@ -4,6 +4,7 @@ import CorporateManagement.FacilityManagement.FacilityManagementBeanLocal;
 import EntityManager.CountryEntity;
 import OperationalCRM.LoyaltyAndRewards.LoyaltyAndRewardsBeanLocal;
 import EntityManager.LoyaltyTierEntity;
+import HelperClasses.Member;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.ejb.EJB;
@@ -14,10 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -40,6 +44,8 @@ public class ECommerce_MemberLoginServlet extends HttpServlet {
 
             HttpSession session = request.getSession();
 
+            //Member m = loginMember(email, password);
+            //String memberEmail = m.getEmail();
             String memberEmail = loginMember(email, password);
 
             if (memberEmail != null) {
@@ -47,7 +53,9 @@ public class ECommerce_MemberLoginServlet extends HttpServlet {
                 session.setAttribute("countries", countries);
 
                 session.setAttribute("memberEmail", memberEmail);
-                response.sendRedirect("/IS3102_Project-war/B/SG/memberProfile.jsp");
+                //session.setAttribute("member", m);
+                response.sendRedirect("ECommerce_GetMemberServlet");
+                
 //                response.sendRedirect("ECommerce_MemberProfile");
             } else {
                 result = "Login fail. Username or password is wrong or account is not activated.";
@@ -75,6 +83,8 @@ public class ECommerce_MemberLoginServlet extends HttpServlet {
         }
 
         email = response.readEntity(String.class);
+        //Member member = response.readEntity(new GenericType<Member>(){});
+        
         return email;
     }
 
