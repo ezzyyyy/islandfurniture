@@ -16,14 +16,14 @@
                     return false;
                 else{
                     var letters = /^[0-9]+$/;
-                    if (document.getElementById("phone").value.match(letters)){
+                    if ((document.getElementById("phone").value.match(letters))&&(document.getElementById("age").value.match(letters))&&(document.getElementById("income").value.match(letters))){
                         
                         return true;
                     }
                         
                     else{
-                        document.getElementById("phone").style.borderColor = "#E34234";
-                        alert("Phone input error");
+                        
+                        alert("Number input error");
                         return false;
                     }
                        
@@ -403,11 +403,11 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Age</label>
-                                            <input class="form-control" name="age" step="1" type="number" min="1" max="150" value="<%=member.getAge()%>">
+                                            <input class="form-control" id="age" name="age" step="1" type="number" min="1" max="150" value="<%=member.getAge()%>">
                                         </div>
                                         <div class="form-group">
                                             <label>Income per annum (in USD)</label>
-                                            <input class="form-control" name="income" step="1" type="number" min="0" max="2147483646" value="<%=member.getIncome()%>">
+                                            <input class="form-control" id="income" name="income" step="1" type="number" min="0" max="2147483646" value="<%=member.getIncome()%>">
                                         </div>
                                         <div class="form-group">
                                             <input type="checkbox" name="serviceLevelAgreement"> Allow us to use your particulars to serve you better?<br/>Checking the box above indicates that you agree to our <a onclick="pdpaWindow()">personal data protection policy.</a>
