@@ -60,28 +60,34 @@ public class ECommerce_MemberEditProfileServlet extends HttpServlet {
             String securityAnswer = request.getParameter("securityAnswer");
             Integer age = Integer.parseInt(request.getParameter("age"));
             Integer income = Integer.parseInt(request.getParameter("income"));
-            //String password = request.getParameter("password");
+            String password = request.getParameter("password");
             String email = request.getParameter("email");
 
             //Member m = accountManagementBean.getMemberByEmail(email);
-            Response r = updateMemberByIDRESTful(id,name,phone,address,securityQuestion,securityAnswer,age,income);
+            //Response r = updateMemberByIDRESTful(id,name,phone,address,securityQuestion,securityAnswer,age,income);
+            String r = updateMemberByIDRESTful(id,name,phone,address,securityQuestion,securityAnswer,age,income,password);
             //session.setAttribute("member", member);
             out.println("\n\n asfadfhdj");
             
-            if(r.getStatus() == 200)
+            if(r == "success")
             response.sendRedirect("ECommerce_GetMemberServlet");
             else
-                out.println("\n\n" + r.getStatus() + r.getStatusInfo());
+                out.println("fail");
         } catch (Exception ex) {
             out.println("\n\n " + ex.getMessage());
         }
+        
+        
     }
+    
+    
 
-    public Response updateMemberByIDRESTful(Long id,String name,String phone,String address,
-            int securityQuestion,String securityAnswer,Integer age,Integer income) {
+    public String updateMemberByIDRESTful(Long id,String name,String phone,String address,
+            int securityQuestion,String securityAnswer,Integer age,Integer income,String password) {
         Client client = ClientBuilder.newClient();
         WebTarget target = client
-                .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.memberentity").path("editMember");
+                .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.memberentity").path("editMember")
+                .queryParam("password", password);
         Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
         Member m = new Member();
         m.setId(id);
@@ -97,11 +103,16 @@ public class ECommerce_MemberEditProfileServlet extends HttpServlet {
         Response response = invocationBuilder.put(Entity.entity(m, MediaType.APPLICATION_JSON));
         //Response response = invocationBuilder.get();
         System.out.println("status: " + response.getStatus());
+        
+        if (response.getStatus() == 200)
+            return "success";
+        else
+            return "fail";
 
         
 
         //Member member = response.readEntity(Member.class);
-        return response;
+        //return response;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

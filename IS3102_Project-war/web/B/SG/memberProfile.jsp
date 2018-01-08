@@ -59,8 +59,8 @@
                             Member member = (Member) session.getAttribute("member");
                             DecimalFormat df = new DecimalFormat("#.##");
                             
-                            out.println (member.getCumulativeSpending());
-                            out.println ("member");
+                            //out.println (member.getCumulativeSpending());
+                            //out.println ("member");
                     %>
                     <div class="row" style="min-height: 500px;">
                         <div class="tabs">
