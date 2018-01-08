@@ -11,6 +11,25 @@
     <jsp:include page="header.html" />
     <body>
         <script>
+            function validate(){
+                if (validatePassword() === false)
+                    return false;
+                else{
+                    var letters = /^[0-9]+$/;
+                    if (document.getElementById("phone").value.match(letters)){
+                        
+                        return true;
+                    }
+                        
+                    else{
+                        document.getElementById("phone").style.borderColor = "#E34234";
+                        alert("Phone input error");
+                        return false;
+                    }
+                       
+                    
+                }
+            }
             function validatePassword() {
                 var password = document.getElementById("password").value;
                 var repassword = document.getElementById("repassword").value;
@@ -78,7 +97,7 @@
                             <div class="tab-content">
                                 <div id="overview" class="tab-pane active">
                                     <%if (member != null) {%>
-                                    <form role="form" action="../../ECommerce_MemberEditProfileServlet" onsubmit="return validatePassword()">
+                                    <form role="form" action="../../ECommerce_MemberEditProfileServlet" onsubmit="return validate()">
                                         <h4>Personal Information</h4>
                                         <input type="hidden" value="<%=member.getId()%>" name="id"/>
                                         <input type="hidden" value="<%=member.getId()%>" name="id"/>
@@ -93,7 +112,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Phone</label>
-                                            <input class="form-control" required="true" type="text" name="phone" value="<%=member.getPhone()%>">
+                                            <input class="form-control" id ="phone" required="true" type="text" name="phone" value="<%=member.getPhone()%>">
                                         </div>
                                         <div class="form-group">
                                             <label>Country</label>

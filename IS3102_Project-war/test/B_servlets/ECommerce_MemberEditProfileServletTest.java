@@ -28,13 +28,13 @@ public class ECommerce_MemberEditProfileServletTest {
     @Test
     public void testUpdateMemberByIDRESTful() {
         System.out.println("updateMemberByIDRESTful");
-        Long id = (long)1;
-        String name = "asa";
+        Long id = (long)8351;
+        String name = "Superman";
         String phone = "344444";
-        String address = "hjxhcak";
-        String password = null;
+        String address = "mars";
+        String password = "12345678";
         int securityQuestion = 1;
-        String securityAnswer = "holyppp";
+        String securityAnswer = "mar";
         Integer age = 12;
         Integer income = 1212;
         ECommerce_MemberEditProfileServlet instance = new ECommerce_MemberEditProfileServlet();
