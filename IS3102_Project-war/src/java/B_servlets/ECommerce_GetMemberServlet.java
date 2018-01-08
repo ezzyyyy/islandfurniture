@@ -51,6 +51,7 @@ public class ECommerce_GetMemberServlet extends HttpServlet {
 
             Member member = retrieveMemberByEmailRESTful(email);
             session.setAttribute("member", member);
+            session.setAttribute("memberName", member.getName());
             
 
             response.sendRedirect("/IS3102_Project-war/B/SG/memberProfile.jsp");
