@@ -5,13 +5,16 @@
  */
 package B_servlets;
 
+import HelperClasses.ShoppingCartLineItem;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -33,16 +36,26 @@ public class ECommerce_RemoveItemFromListServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ECommerce_RemoveItemFromListServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ECommerce_RemoveItemFromListServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            HttpSession session = request.getSession();
+            String id = request.getParameter("id");
+            
+            
+            
+            ArrayList<ShoppingCartLineItem> shoppingCart = (ArrayList<ShoppingCartLineItem>) (session.getAttribute("shoppingCart"));
+            
+            for (int i = 0; i < shoppingCart.size(); i++){
+                if((shoppingCart.get(i).getId().equals(id))&&(shoppingCart.get(i).getId() == id)){
+                    
+                        shoppingCart.remove(i);
+                    
+                    
+                    break;
+                }
+            }
+            
+            
+            
+            response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp");
         }
     }
 
