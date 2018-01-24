@@ -8,6 +8,7 @@ package B_servlets;
 import HelperClasses.ShoppingCartLineItem;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -53,12 +54,28 @@ public class ECommerce_AddFurnitureToListServlet extends HttpServlet {
             item.setQuantity(1);
             item.setSKU(SKU);
             
+            boolean check = false;
+            
+            ArrayList<ShoppingCartLineItem> shoppingCart = (ArrayList<ShoppingCartLineItem>) (session.getAttribute("shoppingCart"));
+            
+            for (ShoppingCartLineItem e : shoppingCart){
+                if((e.getId().equals(id))&&(e.getId() == id)){
+                    check = true;
+                    e.setQuantity(e.getQuantity()+1);
+                    break;
+                }
+            }
+            if(!check){
+            shoppingCart.add(item);
+            }
+            
+            
+            response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp");
         }
-    }
-    
-    private ShoppingCartLineItem AddToCart(String id,String SKU,String price,String name,String imageURL){
         
     }
+    
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
