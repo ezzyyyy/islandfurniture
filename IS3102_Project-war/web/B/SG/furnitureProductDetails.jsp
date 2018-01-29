@@ -29,9 +29,9 @@
         <%
             List<StoreEntity> storesInCountry = (List<StoreEntity>) session.getAttribute("storesInCountry");
             List<Furniture> furnitures = (List<Furniture>) (session.getAttribute("furnitures"));
-            /*define your variables here*/
+            /define your variables here/
             int ii = Integer.parseInt(request.getParameter("index"));
-            /*set your variables here*/
+            /set your variables here/
         %>
         <div class="body">
             <jsp:include page="menu2.jsp" />
@@ -110,6 +110,7 @@
                                                 <input type="submit" class="btn btn-primary btn-icon" value="Check Item Availability"/>
                                                 <input type="hidden" name="sku" value="<%=sku%>"/>
                                                 <input type="hidden" name="type" value="Furniture"/>
+                                                <input type="hidden" name="index" value="<%=ii%>">
                                             </form>
                                         </div>
                                         <%
