@@ -43,7 +43,7 @@ public class ECommerce_AddFurnitureToListServlet extends HttpServlet {
             double price = Double.parseDouble(request.getParameter("price"));
             String name = request.getParameter("name");
             String imageURL = request.getParameter("imageURL");
-            Long countryID = Long.parseLong(request.getParameter("countryID"));
+            Long countryID = (Long) session.getAttribute("countryID");
             
             ShoppingCartLineItem item = new ShoppingCartLineItem();
             item.setCountryID(countryID);
@@ -53,13 +53,19 @@ public class ECommerce_AddFurnitureToListServlet extends HttpServlet {
             item.setPrice(price);
             item.setQuantity(1);
             item.setSKU(SKU);
+            item.setQuantity(1);
             
             boolean check = false;
             
             ArrayList<ShoppingCartLineItem> shoppingCart = (ArrayList<ShoppingCartLineItem>) (session.getAttribute("shoppingCart"));
             
+            if (shoppingCart == null){
+                shoppingCart = new ArrayList<ShoppingCartLineItem>();
+                session.setAttribute("shoppingCart", shoppingCart);
+            }
+            
             for (ShoppingCartLineItem e : shoppingCart){
-                if((e.getId().equals(id))&&(e.getId() == id)){
+                if(e.getSKU().equals(SKU)){
                     check = true;
                     e.setQuantity(e.getQuantity()+1);
                     break;
