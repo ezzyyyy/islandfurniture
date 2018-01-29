@@ -5,13 +5,23 @@
  */
 package B_servlets;
 
+import HelperClasses.ShoppingCartLineItem;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -33,17 +43,78 @@ public class ECommerce_PaymentServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ECommerce_PaymentServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ECommerce_PaymentServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            HttpSession session = request.getSession();
+            ArrayList<ShoppingCartLineItem> shoppingCart = (ArrayList<ShoppingCartLineItem>) (session.getAttribute("shoppingCart"));
+            long countryID = (long)session.getAttribute("countryID");
+            long memberID = (long)session.getAttribute("memberID");
+            double amount = Double.parseDouble(request.getParameter("amount"));
+            long storeID = 0;
+            long salesrecordID = 0;
+            for(ShoppingCartLineItem item : shoppingCart){
+                long newstoreID = getStoreID(item.getSKU());
+                if(newstoreID != storeID){
+                    salesrecordID = createECommerceTransactionRecord(memberID,amount,countryID,newstoreID);
+                    if (salesrecordID == 0){
+                        break;
+                    }
+                    storeID = newstoreID;
+                }
+                int ch = createECommerceLineItemRecord(salesrecordID,shoppingCart);
+                if (ch == 0){
+                    break;
+                }
+            }
+            
         }
+    }
+    
+    private long getStoreID(String SKU){
+        Client client = ClientBuilder.newClient();
+            WebTarget target = client
+                    .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.commerce")
+                    .path("checkStore")
+                    .queryParam("SKU", SKU);
+            Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            Response response = invocationBuilder.get();
+            System.out.println("status: " + response.getStatus());
+            long storeID = response.readEntity(Long.class);
+            return storeID;
+    }
+    
+    private long createECommerceTransactionRecord(long memberID, double amountPaid, long countryID, long storeID){
+        Client client = ClientBuilder.newClient();
+            WebTarget target = client
+                    .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.commerce")
+                    .path("createTransactionRecord")
+                    .queryParam("memberID", memberID)
+                    .queryParam("amountPaid", amountPaid)
+                    .queryParam("countryID", countryID)
+                    .queryParam("storeID", memberID);
+            Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            Response response = invocationBuilder.get();
+            System.out.println("status: " + response.getStatus());
+            if (response.getStatus() != 200) {
+                
+                return 0;
+            }
+            long salesrecordID = response.readEntity(Long.class);
+            return salesrecordID;
+    }
+    
+    private int createECommerceLineItemRecord(long salesrecordID, ArrayList<ShoppingCartLineItem> shoppingCart){
+        Client client = ClientBuilder.newClient();
+            WebTarget target = client
+                    .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.commerce")
+                    .path("createECommerceLineItemRecord")
+                    .queryParam("salesrecordID", salesrecordID);
+            Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            Response response = invocationBuilder.put(Entity.entity(shoppingCart, MediaType.APPLICATION_JSON));
+            System.out.println("status: " + response.getStatus());
+            if (response.getStatus() != 200) {
+                return 0;
+            }
+            
+            return 1;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
