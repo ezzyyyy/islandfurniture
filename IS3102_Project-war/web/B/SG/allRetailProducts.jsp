@@ -1,15 +1,35 @@
 <%@page import="HelperClasses.RetailProduct"%>
-<%@page import="EntityManager.PromotionEntity"%>
-<%@page import="EntityManager.Item_CountryEntity"%>
+<%@page import="java.text.DateFormat"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.net.URLEncoder"%>
+<%@page import="EntityManager.StoreEntity"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page="checkCountry.jsp" />
+<%
+    String sku = request.getParameter("sku");
+    if (sku == null) {
+%>
+<jsp:forward page="index.jsp" />
+<%
+    }
+    Boolean isMemberLoggedIn = false;
+    String memberEmail = (String) (session.getAttribute("memberEmail"));
+    if (memberEmail == null) {
+        isMemberLoggedIn = false;
+    } else {
+        isMemberLoggedIn = true;
+    }
+%>
 <html> <!--<![endif]-->
     <jsp:include page="header.html" />
     <body>
         <%
             List<RetailProduct> retailProducts = (List<RetailProduct>) (session.getAttribute("retailProducts"));
-            System.out.println(retailProducts.size());
+            RetailProduct retailProduct = new RetailProduct();
+            List<StoreEntity> storesInCountry = (List<StoreEntity>) session.getAttribute("storesInCountry");
+            /*insert code here*/
+            int ii = Integer.parseInt(request.getParameter("index"));
         %>
         <div class="body">
             <jsp:include page="menu2.jsp" />
@@ -25,51 +45,86 @@
                         </div>
                     </section>
                     <div class="container">
+                        <hr class="tall">
                         <div class="row">
                             <div class="col-md-6">
-                                <h2 class="shorter"><strong>All Retail Products</strong></h2>
+                                <div>
+                                    <div class="thumbnail">
+                                        <img alt="" class="img-responsive img-rounded" src="../../..<%=retailProducts.get(ii).getImageUrl()/*insert imageURL*/%>">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <ul class="products product-thumb-info-list" data-plugin-masonry>
-                                <%
-                                    try {
-                                        for (int i =0; i< retailProducts.size(); i++){
-                                %>
-                                <li class="col-md-3 col-sm-6 col-xs-12 product">
-                                    <div class="product-thumb-info">
-                                        <span class="product-thumb-info-image">
-                                            <img alt="" class="img-responsive" src="../../..<%=retailProducts.get(i).getImageUrl()%>">
-                                        </span>
-                                        <div class="product-thumb-info-content">
-                                            <h4><%=retailProducts.get(i).getName()%></h4>
-                                            <%
-                                                String normalPrice = "$" + retailProducts.get(i).getPrice() + "0";
-                                            %>
-                                            <span class="product-thumb-info-act-left"><em>Price: <%=normalPrice%></em></span>
-                                            <br/>
-                                            <form action="retailProductDetails.jsp">
-                                                <input type="hidden" name="sku" value="<%=retailProducts.get(i).getSKU()%>"/>
-                                                <input type="hidden" name="index" value="<%=i%>">
-                                                <input type="submit" class="btn btn-primary btn-block" value="More Details"/>
+
+                            <div class="col-md-6">
+                                <div class="summary entry-summary">
+                                    <h2 class="shorter"><strong><%=retailProducts.get(ii).getName() %></strong></h2>
+                                        <%
+                                        if (isMemberLoggedIn == true) {
+                                    %>
+                                    <form action="../../ECommerce_AddFurnitureToListServlet">
+                                        <input type="hidden" name="id" value="<%=retailProducts.get(ii).getId()%>"/>
+                                        <input type="hidden" name="SKU" value="<%=retailProducts.get(ii).getSKU()%>"/>
+                                        <input type="hidden" name="price" value="<%=retailProducts.get(ii).getPrice()%>"/>
+                                        <input type="hidden" name="name" value="<%=retailProducts.get(ii).getName()%>"/>
+                                        <input type="hidden" name="imageURL" value="<%=retailProducts.get(ii).getImageUrl()%>"/>
+                                        <input type="submit" name="btnEdit" class="btn btn-primary" id="submit" value="Add To Cart"/>
+                                    </form>
+                                    <%}%>
+                                    <p class="price"><h4 class="amount">$<%=retailProducts.get(ii).getPrice()/*insert code here*/%></h4></p>
+                                    <strong>Description</strong>
+                                    <p class="taller">
+                                        <%=retailProducts.get(ii).getDescription()/*insert code here*/%>
+                                    </p>
+                                    <div class="product_meta">
+                                        <span class="posted_in">Category: <a rel="tag" href="#"><%=retailProducts.get(ii).getCategory()/*insert code here*/%></a></span>
+                                    </div>
+                                    <br/><br/>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <form action="../../ECommerce_StockAvailability">
+                                                View Item Availability<br/>
+                                                <select style="color: black;" name="storeID">
+                                                    <option> </option>
+                                                    <%String storeIDstring = (request.getParameter("storeID"));
+                                                        Long storeID = 1L;
+                                                        if (storeIDstring != null) {
+                                                            storeID = Long.parseLong(storeIDstring);
+                                                        }
+                                                        for (int i = 0; i < storesInCountry.size(); i++) {
+                                                            if (!storesInCountry.get(i).getId().equals(storeID)) {%>
+                                                    <option value="<%=storesInCountry.get(i).getId()%>"><%=storesInCountry.get(i).getName()%></option>
+                                                    <%} else {%>
+                                                    <option selected value="<%=storesInCountry.get(i).getId()%>"><%=storesInCountry.get(i).getName()%></option>
+                                                    <%
+                                                            }
+                                                        }
+                                                    %>
+                                                </select><br/><br/>
+                                                <input type="submit" class="btn btn-primary btn-icon" value="Check Item Availability"/>
+                                                <input type="hidden" name="sku" value="<%=sku%>"/>
+                                                <input type="hidden" name="index" value="<%=ii%>"/>
+                                                <input type="hidden" name="type" value="Retail Product"/>
                                             </form>
                                         </div>
+                                        <%
+                                            String itemQty = (String) (request.getParameter("itemQty"));
+                                            if (itemQty != null) {
+                                        %>
+                                        <div class="col-md-6">
+                                            Status: <%if (Integer.parseInt(itemQty) > 0) {%>Available<%} else {%>Unavailable<%}%>
+                                            <br/>
+                                            Remaining Qty: <%=itemQty%>
+                                            <%}%>
+                                        </div>
                                     </div>
-                                </li>
-                                <%
-                                    }
-                                        } catch (Exception ex) {
-                                            System.out.println(ex);
-                                        }
-                                %>
-
-                            </ul>
+                                </div>
+                            </div>
+                            <hr class="tall">
                         </div>
-                        <hr class="tall">
                     </div>
                 </div>
+                <jsp:include page="footer.html" />
             </div>
-            <jsp:include page="footer.html" />
-        </div>
     </body>
 </html>
