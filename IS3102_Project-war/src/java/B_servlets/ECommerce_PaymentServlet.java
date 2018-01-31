@@ -5,6 +5,7 @@
  */
 package B_servlets;
 
+import HelperClasses.SalesRecord;
 import HelperClasses.ShoppingCartLineItem;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -50,21 +51,29 @@ public class ECommerce_PaymentServlet extends HttpServlet {
             double amount = Double.parseDouble(request.getParameter("amount"));
             long storeID = 0;
             long salesrecordID = 0;
+            String result = "Error Occur";
             for(ShoppingCartLineItem item : shoppingCart){
                 long newstoreID = getStoreID(item.getSKU());
                 if(newstoreID != storeID){
                     salesrecordID = createECommerceTransactionRecord(memberID,amount,countryID,newstoreID);
                     if (salesrecordID == 0){
+                        response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?errMsg=" + result);
                         break;
                     }
                     storeID = newstoreID;
                 }
-                int ch = createECommerceLineItemRecord(salesrecordID,shoppingCart);
+                int ch = createECommerceLineItemRecord(salesrecordID,item);
                 if (ch == 0){
+                    response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?errMsg=" + result);
                     break;
                 }
             }
+            shoppingCart.clear();
+            result = "payment successful";
+            response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?success=" + result);
             
+        }catch(Exception e){
+            System.out.println(e);
         }
     }
     
@@ -77,38 +86,39 @@ public class ECommerce_PaymentServlet extends HttpServlet {
             Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
             Response response = invocationBuilder.get();
             System.out.println("status: " + response.getStatus());
-            long storeID = response.readEntity(Long.class);
-            return storeID;
+            String storeID = (String)response.readEntity(String.class);
+            return Long.parseLong(storeID);
     }
     
     private long createECommerceTransactionRecord(long memberID, double amountPaid, long countryID, long storeID){
         Client client = ClientBuilder.newClient();
             WebTarget target = client
                     .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.commerce")
-                    .path("createTransactionRecord")
-                    .queryParam("memberID", memberID)
-                    .queryParam("amountPaid", amountPaid)
-                    .queryParam("countryID", countryID)
-                    .queryParam("storeID", memberID);
+                    .path("createECommerceTransactionRecord");
+            SalesRecord sr = new SalesRecord(memberID,amountPaid,countryID,storeID);
             Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
-            Response response = invocationBuilder.get();
+            invocationBuilder.header("some-header", "true");
+            
+            Response response = invocationBuilder.put(Entity.entity(sr, MediaType.APPLICATION_JSON));
             System.out.println("status: " + response.getStatus());
             if (response.getStatus() != 200) {
                 
                 return 0;
             }
-            long salesrecordID = response.readEntity(Long.class);
-            return salesrecordID;
+            String salesrecordID = (String)response.readEntity(String.class);
+            //long salesrecordID = response.readEntity(Long.class);
+            return Long.parseLong(salesrecordID);
     }
     
-    private int createECommerceLineItemRecord(long salesrecordID, ArrayList<ShoppingCartLineItem> shoppingCart){
+    private int createECommerceLineItemRecord(long salesrecordID, ShoppingCartLineItem item){
         Client client = ClientBuilder.newClient();
             WebTarget target = client
                     .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.commerce")
                     .path("createECommerceLineItemRecord")
                     .queryParam("salesrecordID", salesrecordID);
             Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
-            Response response = invocationBuilder.put(Entity.entity(shoppingCart, MediaType.APPLICATION_JSON));
+            invocationBuilder.header("some-header", "true");
+            Response response = invocationBuilder.put(Entity.entity(item, MediaType.APPLICATION_JSON));
             System.out.println("status: " + response.getStatus());
             if (response.getStatus() != 200) {
                 return 0;
