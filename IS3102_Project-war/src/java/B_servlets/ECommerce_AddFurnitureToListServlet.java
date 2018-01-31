@@ -15,6 +15,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -56,6 +62,13 @@ public class ECommerce_AddFurnitureToListServlet extends HttpServlet {
             item.setQuantity(1);
             
             boolean check = false;
+            int stock = checkStock(SKU);
+            String result = "Item out of stock";
+            if(stock == 0){
+                
+                response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?errMsg=" + result);
+            }else{
+                
             
             ArrayList<ShoppingCartLineItem> shoppingCart = (ArrayList<ShoppingCartLineItem>) (session.getAttribute("shoppingCart"));
             
@@ -66,6 +79,10 @@ public class ECommerce_AddFurnitureToListServlet extends HttpServlet {
             
             for (ShoppingCartLineItem e : shoppingCart){
                 if(e.getSKU().equals(SKU)){
+                    if(stock < (e.getQuantity() + 1)){
+                        response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?errMsg=" + result);
+                        return;
+                    }
                     check = true;
                     e.setQuantity(e.getQuantity()+1);
                     break;
@@ -77,8 +94,34 @@ public class ECommerce_AddFurnitureToListServlet extends HttpServlet {
             
             
             response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp");
+            }
         }
         
+        
+        
+        }
+        public int checkStock(String SKU){
+            try {
+            System.out.println("getQuantity() SKU: " + SKU);
+            Client client = ClientBuilder.newClient();
+            WebTarget target = client
+                    .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.storeentity")
+                    .path("getQuantityForAddToCart")
+                    .queryParam("SKU", SKU);
+            Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+            Response response = invocationBuilder.get();
+            System.out.println("status: " + response.getStatus());
+            if (response.getStatus() != 200) {
+                return 0;
+            }
+            String result = (String) response.readEntity(String.class);
+            System.out.println("Result returned from ws: " + result);
+            return Integer.parseInt(result);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
     
 
