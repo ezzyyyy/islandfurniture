@@ -86,7 +86,8 @@ public class ECommerce_MemberEditProfileServlet extends HttpServlet {
             int securityQuestion,String securityAnswer,Integer age,Integer income,String password) {
         Client client = ClientBuilder.newClient();
         WebTarget target = client
-                .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.memberentity").path("editMember")
+                .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.memberentity")
+                .path("editMember")
                 .queryParam("password", password);
         Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
         Member m = new Member();

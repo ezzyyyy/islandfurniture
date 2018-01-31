@@ -9,7 +9,7 @@
     <body>
         <%
             List<RetailProduct> retailProducts = (List<RetailProduct>) (session.getAttribute("retailProducts"));
-            //System.out.println(retailProducts.size());
+            System.out.println(retailProducts.size());
         %>
         <div class="body">
             <jsp:include page="menu2.jsp" />

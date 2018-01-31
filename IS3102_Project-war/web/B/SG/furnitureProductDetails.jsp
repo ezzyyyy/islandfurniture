@@ -110,6 +110,7 @@
                                                 <input type="submit" class="btn btn-primary btn-icon" value="Check Item Availability"/>
                                                 <input type="hidden" name="sku" value="<%=sku%>"/>
                                                 <input type="hidden" name="type" value="Furniture"/>
+                                                <input type="hidden" name="index" value="<%=ii%>">
                                             </form>
                                         </div>
                                         <%

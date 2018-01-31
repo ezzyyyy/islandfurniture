@@ -13,6 +13,13 @@
 <jsp:forward page="index.jsp" />
 <%
     }
+    Boolean isMemberLoggedIn = false;
+    String memberEmail = (String) (session.getAttribute("memberEmail"));
+    if (memberEmail == null) {
+        isMemberLoggedIn = false;
+    } else {
+        isMemberLoggedIn = true;
+    }
 %>
 <html> <!--<![endif]-->
     <jsp:include page="header.html" />
@@ -51,7 +58,18 @@
                             <div class="col-md-6">
                                 <div class="summary entry-summary">
                                     <h2 class="shorter"><strong><%=retailProducts.get(ii).getName() %></strong></h2>
-
+                                        <%
+                                        if (isMemberLoggedIn == true) {
+                                    %>
+                                    <form action="../../ECommerce_AddFurnitureToListServlet">
+                                        <input type="hidden" name="id" value="<%=retailProducts.get(ii).getId()%>"/>
+                                        <input type="hidden" name="SKU" value="<%=retailProducts.get(ii).getSKU()%>"/>
+                                        <input type="hidden" name="price" value="<%=retailProducts.get(ii).getPrice()%>"/>
+                                        <input type="hidden" name="name" value="<%=retailProducts.get(ii).getName()%>"/>
+                                        <input type="hidden" name="imageURL" value="<%=retailProducts.get(ii).getImageUrl()%>"/>
+                                        <input type="submit" name="btnEdit" class="btn btn-primary" id="submit" value="Add To Cart"/>
+                                    </form>
+                                    <%}%>
                                     <p class="price"><h4 class="amount">$<%=retailProducts.get(ii).getPrice()/*insert code here*/%></h4></p>
                                     <strong>Description</strong>
                                     <p class="taller">
@@ -85,6 +103,7 @@
                                                 </select><br/><br/>
                                                 <input type="submit" class="btn btn-primary btn-icon" value="Check Item Availability"/>
                                                 <input type="hidden" name="sku" value="<%=sku%>"/>
+                                                <input type="hidden" name="index" value="<%=ii%>"/>
                                                 <input type="hidden" name="type" value="Retail Product"/>
                                             </form>
                                         </div>
