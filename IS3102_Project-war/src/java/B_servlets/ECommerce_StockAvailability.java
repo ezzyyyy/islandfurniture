@@ -23,15 +23,16 @@ public class ECommerce_StockAvailability extends HttpServlet {
             String storeIDstring = request.getParameter("storeID");
             String SKU = request.getParameter("sku");
             String type = request.getParameter("type");
+            String index = request.getParameter("index");
 
             //<editor-fold defaultstate="collapsed" desc="check storeID and SKU validity">
             if ((storeIDstring == null || storeIDstring.equals("")) && (SKU == null || SKU.equals(""))) {
                 response.sendRedirect("/IS3102_Project-war/B/SG/index.jsp");
             } else if (storeIDstring == null || storeIDstring.equals("")) {
                 if (type.equals("Furniture")) {
-                    response.sendRedirect("/IS3102_Project-war/B/SG/furnitureProductDetails.jsp?sku=" + SKU);
+                    response.sendRedirect("/IS3102_Project-war/B/SG/furnitureProductDetails.jsp?sku=" + SKU +"&index=" + index);
                 } else if (type.equals("Retail Product")) {
-                    response.sendRedirect("/IS3102_Project-war/B/SG/retailProductDetails.jsp?sku=" + SKU);
+                    response.sendRedirect("/IS3102_Project-war/B/SG/retailProductDetails.jsp?sku=" + SKU +"&index=" + index);
                 }
             }
             //</editor-fold>
@@ -40,9 +41,9 @@ public class ECommerce_StockAvailability extends HttpServlet {
             int itemQty = getQuantity(storeID, SKU);
 
             if (type.equals("Furniture")) {
-                response.sendRedirect("/IS3102_Project-war/B/SG/furnitureProductDetails.jsp?sku=" + SKU + "&itemQty=" + itemQty + "&storeID=" + storeID);
+                response.sendRedirect("/IS3102_Project-war/B/SG/furnitureProductDetails.jsp?sku=" + SKU + "&itemQty=" + itemQty + "&storeID=" + storeID +"&index=" + index);
             } else if (type.equals("Retail Product")) {
-                response.sendRedirect("/IS3102_Project-war/B/SG/retailProductDetails.jsp?sku=" + SKU + "&itemQty=" + itemQty + "&storeID=" + storeID);
+                response.sendRedirect("/IS3102_Project-war/B/SG/retailProductDetails.jsp?sku=" + SKU + "&itemQty=" + itemQty + "&storeID=" + storeID +"&index=" + index);
             }
 
         } catch (Exception ex) {

@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author caeden
  */
-@WebServlet(name = "ECommerce_MinusFurnitureToListServlet_1", urlPatterns = {"/ECommerce_MinusFurnitureToListServlet_1"})
+@WebServlet(name = "ECommerce_MinusFurnitureToListServlet", urlPatterns = {"/ECommerce_MinusFurnitureToListServlet"})
 public class ECommerce_MinusFurnitureToListServlet extends HttpServlet {
 
     /**
@@ -38,14 +38,14 @@ public class ECommerce_MinusFurnitureToListServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession();
-            String id = request.getParameter("id");
+            String SKU = request.getParameter("SKU");
             
             
             
             ArrayList<ShoppingCartLineItem> shoppingCart = (ArrayList<ShoppingCartLineItem>) (session.getAttribute("shoppingCart"));
             
             for (int i = 0; i < shoppingCart.size(); i++){
-                if((shoppingCart.get(i).getId().equals(id))&&(shoppingCart.get(i).getId() == id)){
+                if(shoppingCart.get(i).getSKU().equals(SKU)){
                     if(shoppingCart.get(i).getQuantity() == 1){
                         shoppingCart.remove(i);
                     }

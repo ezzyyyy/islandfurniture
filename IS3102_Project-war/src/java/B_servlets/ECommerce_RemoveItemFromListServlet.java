@@ -37,27 +37,27 @@ public class ECommerce_RemoveItemFromListServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession();
-            String id = request.getParameter("id");
+            String[] id = request.getParameterValues("delete");
             
             
             
             ArrayList<ShoppingCartLineItem> shoppingCart = (ArrayList<ShoppingCartLineItem>) (session.getAttribute("shoppingCart"));
-            
-            for (int i = 0; i < shoppingCart.size(); i++){
-                if((shoppingCart.get(i).getId().equals(id))&&(shoppingCart.get(i).getId() == id)){
+            for (int o = 0; o < id.length; o++){
+                for (int i = 0; i < shoppingCart.size(); i++){
+                if(shoppingCart.get(i).getId().equals(id[o])){
                     
                         shoppingCart.remove(i);
                     
-                    
-                    break;
                 }
             }
+            }
+            
             
             
             
             response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp");
         }
-    }
+    } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

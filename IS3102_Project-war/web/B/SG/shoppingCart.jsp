@@ -34,6 +34,7 @@
                 } else {
                     window.event.returnValue = true;
                     document.shoppingCart.action = "../../ECommerce_RemoveItemFromListServlet";
+                    
                     document.shoppingCart.submit();
                 }
             }
@@ -133,7 +134,7 @@
                                                         %>
                                                         <tr class="cart_table_item">
                                                             <td class="product-remove">
-                                                                <input type="checkbox" name="delete" value="" />
+                                                                <input type="checkbox" name="delete" value="<%=item.getId()%>" />
                                                             </td>
                                                             <td class="product-thumbnail">
                                                                 <a href="furnitureProductDetails.jsp">
@@ -152,7 +153,7 @@
                                                                 <form enctype="multipart/form-data" method="post" class="cart">
                                                                     <div class="quantity">
                                                                         <input type="button" class="minus" value="-" onclick="minus('<%=item.getSKU()%>')">
-                                                                        <input type="text" disabled="true" class="input-text qty text" title="Qty" value="" name="quantity" min="1" step="1" id="<%=item.getSKU()%>">
+                                                                        <input type="text" disabled="true" class="input-text qty text" title="Qty" value="<%=item.getQuantity()%>" name="quantity" min="1" step="1" id="<%=item.getSKU()%>">
                                                                         <input type="button" class="plus" value="+" onclick="plus('<%=item.getSKU()%>', '<%=item.getName()%>',<%=item.getPrice()%>, '<%=item.getImageURL()%>')">
                                                                     </div>
                                                                 </form>
@@ -260,6 +261,7 @@
                                                         </tr>
                                                         </tbody></table>
                                                 </div>
+                                                <input type="hidden" name="amount" value="<%=totalprice%>"/>
                                             </form>
                                         </div>
                                     </div>
@@ -314,6 +316,7 @@
                         </div>
                         <div class="modal-footer">                        
                             <input class="btn btn-primary" name="btnPayment" type="submit" value="Confirm" onclick="makePayment()"  />
+                            
                             <a class="btn btn-default" data-dismiss ="modal">Close</a>
                         </div>
                     </div>
