@@ -261,6 +261,7 @@
                                                         </tr>
                                                         </tbody></table>
                                                 </div>
+                                                <input type="hidden" name="amount" value="<%=totalprice%>"/>
                                             </form>
                                         </div>
                                     </div>
@@ -315,6 +316,7 @@
                         </div>
                         <div class="modal-footer">                        
                             <input class="btn btn-primary" name="btnPayment" type="submit" value="Confirm" onclick="makePayment()"  />
+                            
                             <a class="btn btn-default" data-dismiss ="modal">Close</a>
                         </div>
                     </div>
