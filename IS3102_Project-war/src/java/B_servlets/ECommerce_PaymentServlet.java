@@ -70,7 +70,7 @@ public class ECommerce_PaymentServlet extends HttpServlet {
             }
             shoppingCart.clear();
             result = "payment successful";
-            response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?success=" + result);
+            response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp?goodMsg=" + result);
             
         }catch(Exception e){
             System.out.println(e);

@@ -4,27 +4,6 @@
 <html> <!--<![endif]-->
     <jsp:include page="header.html" />
     <body>
-
-        <script src="https://maps.googleapis.com/maps/api/js"></script>
-        <script>
-            function initialize() {
-                var mapCanvas = document.getElementById('map_canvas');
-                var mapOptions = {
-                    center: new google.maps.LatLng(1.3003076, 103.8609153),
-                    zoom: 8,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                }
-                var map = new google.maps.Map(mapCanvas, mapOptions)
-            }
-            google.maps.event.addDomListener(window, 'load', initialize);
-        </script>
-        <style>
-            #map_canvas {
-                width: 500px;
-                height: 150px;
-            }
-        </style>
-
         <div class="body">
             <jsp:include page="menu2.jsp" />
 
@@ -47,17 +26,47 @@
                             <div class="toogle" data-plugin-toggle>
                                 <%
                                     List<StoreEntity> stores = (List<StoreEntity>) (session.getAttribute("storesInCountry"));
-
                                     try {
                                         if (stores != null) {
                                             for (int i = 0; i < stores.size(); i++) {
                                 %>
-
+<script>
+    function UpdateIFrame(){
+//        console.log('running function');
+        $.ajax({
+        url: 'https://developers.onemap.sg/commonapi/search?searchVal='+'<%=stores.get(i).getAddress()%>'+'&returnGeom=Y&getAddrDetails=N',
+        success: function(result){
+            //console.log(result);
+            //console.log(result.results[0]);
+            Lat = result.results[0].LATITUDE;
+            Long = result.results[0].LONGITUDE;
+            //console.log(Lat+','+Long + '<%=stores.get(i).getName()%>');
+            newSrc = 'https://tools.onemap.sg/minimap/minimap.html?mWidth=490&mHeight=195&latLng='+Lat+','+Long+'&zoomLevl=17&iwt='+
+                                                    '<span><%=stores.get(i).getName()%></span><br>'+
+                                                    '<div><span>Address: <%=stores.get(i).getAddress()%></span><br style="box-sizing: border-box;">'+
+                                                    '<span>Telephone: <%=stores.get(i).getTelephone()%></span><br style="box-sizing: border-box;">'+
+                                                    '<span>Email: <%=stores.get(i).getEmail()%></span>'+
+                                                    '</div>&popupWidth=200&popupHeight=500&includePopup=true&onloadPopup=true&design=default';
+            //console.log(newSrc);
+            document.getElementById('oneMap<%=i%>').src = newSrc;
+            //adding < % = i % > solved the problem as the element by ID does not know which element to get.
+        }});
+    }
+</script>
                                 <section class="toggle">
                                     <label>Name: <%=stores.get(i).getName()%></label>
                                     <div class="toggle-content">
                                         <div class="col-md-6">
-                                            <div id="map_canvas"></div>
+                                            <div id="map_canvas">
+                                                <script>UpdateIFrame();</script>
+                                                <iframe id='oneMap<%=i%>' src='https://tools.onemap.sg/minimap/minimap.html?mWidth=490&mHeight=195&latLng=1.28794376443444,103.806003412297&zoomLevl=17&iwt=
+                                                    <span><%=stores.get(i).getName()%></span><br>
+                                                    <div><span>Address: <%=stores.get(i).getAddress()%></span><br style="box-sizing: border-box;">
+                                                    <span>Telephone: <%=stores.get(i).getTelephone()%></span><br style="box-sizing: border-box;">
+                                                    <span>Email: <%=stores.get(i).getEmail()%></span>
+                                                    </div>&popupWidth=200&popupHeight=500&includePopup=true&onloadPopup=true&design=default' height=200px width=500px scrolling='no' frameborder='0' allowfullscreen='allowfullscreen'>
+                                                </iframe>
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
                                             <p>

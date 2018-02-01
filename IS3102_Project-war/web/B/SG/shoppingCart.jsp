@@ -197,7 +197,7 @@
                                             </form>
 
 
-                                            <form id="makePaymentForm" name="makePaymentForm" method="post">
+                                            <form id="makePaymentForm" name="makePaymentForm" method="post" hidden>
                                                 <div class="col-md-8">
                                                     <br>
                                                     <table>
