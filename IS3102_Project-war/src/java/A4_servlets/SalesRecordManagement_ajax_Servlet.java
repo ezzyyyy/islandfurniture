@@ -24,9 +24,10 @@ public class SalesRecordManagement_ajax_Servlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        System.out.println("SalesRecordManagement_ajax_Servlet is called");
+        System.out.println("SalesRecordManagement_ajax_Servlet is being called");
         Long regionalOfficeId = Long.parseLong(request.getParameter("regionalOfficeId"));
         System.out.println("regionalOfficeId: " + regionalOfficeId);
+        
         List<StoreEntity> storeList = fmBean.getStoreListByRegionalOffice(regionalOfficeId);
         
         System.out.println("List.size(): "+ storeList.size());
