@@ -47,8 +47,8 @@
                                     <div class="panel-body">
                                         <div class="table-responsive">
                                             <br>
-                                            <div id="dataTables-example_wrapper" class="dataTables_wrapper form-inline" role="grid">
-                                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                            <div id="dataTables_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                                                <table class="table table-striped table-bordered table-hover" id="dataTables">
                                                     <thead>
                                                         <tr>               
                                                             <th>Sales Record Id</th>
@@ -119,7 +119,7 @@
         </div>
         <script>
             $(document).ready(function() {
-                $('#dataTables-example').dataTable();
+                $('#dataTables').dataTable();
             });
         </script>
     </body>
