@@ -108,7 +108,7 @@ public class ECommerce_PaymentServlet extends HttpServlet {
             String salesrecordID = (String)response.readEntity(String.class);
             //long salesrecordID = response.readEntity(Long.class);
             return Long.parseLong(salesrecordID);
-    }
+    } 
     
     private int createECommerceLineItemRecord(long salesrecordID, ShoppingCartLineItem item){
         Client client = ClientBuilder.newClient();
