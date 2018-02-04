@@ -252,11 +252,19 @@
                                                                 <input type="text" style="width: 60px" class="input-text text" title="year" id="year" required>(eg: 2015)                                                        
                                                             </td>
                                                         </tr>
+                                                        
                                                         <tr>
-                                                            <td style="">
-                                                            </td>
                                                             <td style="padding-top: 20px">
-                                                                <div align="right"><a href="#makePaymentModal" data-toggle="modal"><button class="btn btn-primary">Make Payment</button></a></div>
+                                                                <div align="left"><a href="#makePaymentModal" data-toggle="modal"><button class="btn btn-primary">Make Payment</button></a></div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding-top: 20px">or</td>
+                                                        </tr>
+                                                        <tr>
+                                                            
+                                                            <td style="padding-top: 20px">
+                                                                <div align="left" id="paypal-button"></div>
                                                             </td>
                                                         </tr>
                                                         </tbody></table>
@@ -314,7 +322,8 @@
                         <div class="modal-body">
                             <p id="messageBox">You are making payment now. Are you sure you want to continue?</p>
                         </div>
-                        <div class="modal-footer">                        
+                        <div class="modal-footer">  
+                            
                             <input class="btn btn-primary" name="btnPayment" type="submit" value="Confirm" onclick="makePayment()"  />
                             
                             <a class="btn btn-default" data-dismiss ="modal">Close</a>
@@ -328,6 +337,41 @@
             <!-- Theme Initializer -->
             <script src="../../js/theme.plugins.js"></script>
             <script src="../../js/theme.js"></script>
+            <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+            <script>
+                paypal.Button.render({
+
+                    env: 'sandbox', // Or 'sandbox'
+
+                    client: {
+                        sandbox:    'ATDuVdUbjLzDowhAnvfcLznzDwAimSMaUcpuKS1ppe3WOjbWPHDzujy7YNj_SN5_tvQXG1Xfqcur5ky9'
+                    },
+
+                    commit: true, // Show a 'Pay Now' button
+
+                    payment: function(data, actions) {
+                        return actions.payment.create({
+                            payment: {
+                                transactions: [
+                                    {
+                                        amount: { total: '<%=totalprice%>', currency: 'SGD' }
+                                    }
+                                ]
+                            }
+                        });
+                    },
+
+                    onAuthorize: function(data, actions) {
+                        return actions.payment.execute().then(function(payment) {
+                            makePayment();
+                            // The payment is complete!
+                            // You can now show a confirmation message to the customer
+                        });
+                    }
+
+                }, '#paypal-button');
+            </script>
 
             <!-- Current Page JS -->
             <script src="../../vendor/rs-plugin/js/jquery.themepunch.tools.min.js"></script>
