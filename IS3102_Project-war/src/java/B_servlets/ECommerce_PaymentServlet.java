@@ -77,7 +77,7 @@ public class ECommerce_PaymentServlet extends HttpServlet {
         }
     }
     
-    private long getStoreID(String SKU){
+    public long getStoreID(String SKU){
         Client client = ClientBuilder.newClient();
             WebTarget target = client
                     .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.commerce")
@@ -90,7 +90,7 @@ public class ECommerce_PaymentServlet extends HttpServlet {
             return Long.parseLong(storeID);
     }
     
-    private long createECommerceTransactionRecord(long memberID, double amountPaid, long countryID, long storeID){
+    public long createECommerceTransactionRecord(long memberID, double amountPaid, long countryID, long storeID){
         Client client = ClientBuilder.newClient();
             WebTarget target = client
                     .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.commerce")
@@ -110,7 +110,7 @@ public class ECommerce_PaymentServlet extends HttpServlet {
             return Long.parseLong(salesrecordID);
     } 
     
-    private int createECommerceLineItemRecord(long salesrecordID, ShoppingCartLineItem item){
+    public int createECommerceLineItemRecord(long salesrecordID, ShoppingCartLineItem item){
         Client client = ClientBuilder.newClient();
             WebTarget target = client
                     .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.commerce")
